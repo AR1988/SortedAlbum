@@ -5,7 +5,7 @@ import java.util.Objects;
 
 // todo:  implements Comparable<Photo>
 // сравнивать фотографии по albumId, photoId
-public class Photo {
+public class Photo implements Comparable<Photo> {
     private int albumId;
     private int photoId;
     private String title;
@@ -49,6 +49,12 @@ public class Photo {
     }
 
     @Override
+    public int compareTo(Photo other) {
+        int albumCompare = Integer.compare(this.getAlbumId(), other.albumId);
+        return albumCompare != 0 ? albumCompare : Integer.compare(this.getPhotoId(), other.getPhotoId());
+    }
+
+    @Override
     public String toString() {
         return "Photo albumId = " + albumId + ", photoId=" + photoId +
                 ", title='" + title + '\'' +
@@ -68,7 +74,6 @@ public class Photo {
     public int hashCode() {
         return Objects.hash(albumId, photoId);
     }
-
 }
 
 
