@@ -6,8 +6,9 @@ import model.Photo;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Iterator;
 
-public class AlbumImpl implements Album {
+public class AlbumImpl implements Album, Iterable<Photo> {
     private Photo[] photos;
     private int size;
 
@@ -138,5 +139,23 @@ public class AlbumImpl implements Album {
     @Override
     public int size() {
         return size;
+    }
+
+    @Override
+    public Iterator<Photo> iterator() {
+        return new Iterator<>() {
+
+            private int currPos;
+
+            @Override
+            public boolean hasNext() {
+                return currPos < size;
+            }
+
+            @Override
+            public Photo next() {
+                return photos[currPos++];
+            }
+        };
     }
 }
