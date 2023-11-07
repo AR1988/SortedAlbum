@@ -36,36 +36,44 @@ public class AlbumImpl implements Album {
             return false;
         }
 
-        boolean isPhotoAlreadyAdded = getPhotoFromAlbum(photo.getPhotoId(), photo.getAlbumId()) != null;
-        if (isPhotoAlreadyAdded) {
+        if (size == photos.length) {
             return false;
         }
 
-        boolean hasSlot = size == photos.length;
-        if (hasSlot) {
-            return false;
+        int insertIdx = Arrays.binarySearch(photos, 0, size, photo);
+        if (insertIdx >= 0) {
+            return false; // элемент уже существует
         }
 
-        photos[size++] = photo;
-        if (size > 1) { // если есть больше одного элемента, то сортируем
-            Arrays.sort(photos, 0, size);
-        }
+        insertIdx = -insertIdx - 1; // Если элемент не найден binarySearch возвращает отрицательный индекс для вставки
+
+        // 1,2,6,7
+        // 3 (num to add)
+        // insertIdx = 2 (line 44)
+        // 1,2,null,6,7 (раздвинуть массив, строка 52)
+        // 1,2,3,6,7
+
+        System.arraycopy(photos, insertIdx, photos, insertIdx + 1, size - insertIdx);
+        photos[insertIdx] = photo;
+        size++;
         return true;
     }
 
     @Override
     public boolean removePhoto(int photoId, int albumId) {
-        for (int i = 0; i < size; i++) {
-            if (photos[i].getAlbumId() == albumId && photos[i].getPhotoId() == photoId) {
-                System.arraycopy(photos, i + 1, photos, i, size - i - 1);
-                photos[size] = null;
-                size--;
-//                photos[i] = photos[size];
-//                photos[size] = null;
-//                size--;
-                return true;
-            }
+        // Создать временный объект для поиска
+        Photo template = new Photo(albumId, photoId);
+
+        // Выполнить поиск
+        int intexToRemove = Arrays.binarySearch(photos, 0, size, template);
+
+        // если индекс >= 0, то удалить элемент, сместить массив.
+        if (intexToRemove >= 0) {
+            System.arraycopy(photos, intexToRemove + 1, photos, intexToRemove, size - intexToRemove - 1);
+            photos[--size] = null;
+            return true;
         }
+
 
         return false;
     }
@@ -84,11 +92,15 @@ public class AlbumImpl implements Album {
 
     @Override
     public Photo getPhotoFromAlbum(int photoId, int albumId) {
-        for (int i = 0; i < size; i++) {
-            if (photos[i].getAlbumId() == albumId && photos[i].getPhotoId() == photoId) {
-                return photos[i];
-            }
+        // Создать временный объект для поиска
+        Photo template = new Photo(albumId, photoId);
+        // Выполнить поиск
+        int index = Arrays.binarySearch(photos, 0, size, template);
+        // если индекс >= 0, то вернуть элемент
+        if (index >= 0) {
+            return photos[index];
         }
+
         return null;
     }
 

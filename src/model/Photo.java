@@ -6,6 +6,7 @@ import java.util.Objects;
 // todo:  implements Comparable<Photo>
 // сравнивать фотографии по albumId, photoId
 public class Photo implements Comparable<Photo> {
+
     private int albumId;
     private int photoId;
     private String title;
@@ -18,6 +19,16 @@ public class Photo implements Comparable<Photo> {
         this.title = title;
         this.url = url;
         this.date = date;
+    }
+
+    /**
+     * Use for binarry search
+     * @param albumId
+     * @param photoId
+     */
+    public Photo(int albumId, int photoId) {
+        this.albumId = albumId;
+        this.photoId = photoId;
     }
 
     public int getAlbumId() {
