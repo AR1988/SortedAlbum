@@ -54,6 +54,15 @@ public class Photo implements Comparable<Photo> {
         return albumCompare != 0 ? albumCompare : Integer.compare(this.getPhotoId(), other.getPhotoId());
     }
 
+//    @Override
+//    public int compareTo(Photo other) {
+//        int albumCompare = Integer.compare(this.getAlbumId(), other.albumId);
+//        if (albumCompare != 0) {
+//            return albumCompare;
+//        }
+//        return Integer.compare(this.getPhotoId(), other.getPhotoId());
+//    }
+
     @Override
     public String toString() {
         return "Photo albumId = " + albumId + ", photoId=" + photoId +
